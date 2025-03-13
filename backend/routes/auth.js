@@ -6,6 +6,7 @@ const authRouter = express.Router();
 
 // ma hoa mk
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 
 authRouter.post('/api/signup', async (req, res) => {
@@ -29,4 +30,28 @@ authRouter.post('/api/signup', async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 });
+
+// dang nhap api voi pont
+
+authRouter.post('/api/signin', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const findUser = await User.findOne({ email });
+        if (!findUser) {
+            return res.status(400).json({ msg: " Không tìm thấy tài khoản " });
+        } else {
+            const isMatch = await bcrypt.compare(password, findUser.password);
+            if (!isMatch) {
+                return res.status(400).json({ msg: "Mật khẩu không đúng" });
+            } else {
+                const token = jwt.sign({ id: findUser._id }, "passwordKey");
+                const { password, ...userWithoutPassword } = findUser._doc;
+                res.json({ token, ...userWithoutPassword });
+            }
+        }
+    } catch (error) {
+
+    }
+});
+
 module.exports = authRouter;
