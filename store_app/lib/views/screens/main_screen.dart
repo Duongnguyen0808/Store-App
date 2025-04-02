@@ -14,11 +14,11 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _pageIndex = 0;
   final List<Widget> _pages = [
-    HomeScreen(),
-    FavoriteScreen(),
+    const HomeScreen(),
+    const FavoriteScreen(),
     const CategoryScreen(),
-    StoresScreen(),
-    CartScreen(),
+    const StoresScreen(),
+    const CartScreen(),
     AccountScreen(),
   ];
 

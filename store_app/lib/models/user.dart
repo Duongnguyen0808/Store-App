@@ -38,26 +38,8 @@ class User {
     };
   }
 
-  //Serialization: Covert Map to a Json String
-  //This method directly encodes the data from the Map into a Json String
-
-  //The json.encode() function converts a Dart object (such as Map or List)
-  //into a Json String reprensentation , making it suitable for communication
-  //between different system.
   String toJson() => json.encode(toMap());
 
-  //Deserialization: Covert a Map to a user Object
-  //purpose - Manipulation and user : Once the data is coverted a to a User object
-  //it can be easily manipuated and use within the application . For example
-  //we might want to display the user's fullName, email etc on the Ui. Or we might
-  //want to save the data locally.
-
-  //the factory contructor takes a Map(Usually obtained from a json object)
-  //and coverts it into a user Object. If a field is not presend in the,
-  //it defaults to an empty String.
-
-  //fromMap: This contructor take a Map<String, dynamic> and coverts into a user Object
-  // its usefull when you already have the data in map format
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       id: map['_id'] as String? ?? "",
@@ -71,7 +53,7 @@ class User {
     );
   }
 
-  //fromJson: This factory contructor takes Json String, and decodes into a Map<String, dynamic>
+  //fromJson: This factory constructor takes Json String, and decodes into a Map<String, dynamic>
   //and then uses fromMap to covert that Map into a User Object
 
   factory User.fromJson(String source) =>

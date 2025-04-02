@@ -44,7 +44,7 @@ authRouter.post('/api/signin', async (req, res) => {
 
                 //send the responses
 
-                res.json({ token, ...userWithoutPassword });
+                res.json({ token, user: userWithoutPassword });
             }
         }
     } catch (error) {
