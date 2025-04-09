@@ -29,6 +29,8 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
   late int quantity;
   late String description;
 
+  bool isLoading = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -127,6 +129,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                   SizedBox(
                     width: 200,
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       onChanged: (value) {
                         productPrice = int.parse(value);
                       },
@@ -149,6 +152,7 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                   SizedBox(
                     width: 200,
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       onChanged: (value) {
                         quantity = int.parse(value);
                       },
@@ -276,22 +280,34 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: InkWell(
-                onTap: () {
+                onTap: () async {
                   final fullName = ref.read(vendorProvider)!.fullName;
                   final vendorId = ref.read(vendorProvider)!.id;
                   if (_fromKey.currentState!.validate()) {
-                    _productController.uploadProduct(
-                      productName: productName,
-                      productPrice: productPrice,
-                      quantity: quantity,
-                      description: description,
-                      category: selectedCategory!.name,
-                      vendorId: vendorId,
-                      fullName: fullName,
-                      subCategory: selectedSubcategory!.subCategoryName,
-                      pickedImages: images,
-                      context: context,
-                    );
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await _productController
+                        .uploadProduct(
+                          productName: productName,
+                          productPrice: productPrice,
+                          quantity: quantity,
+                          description: description,
+                          category: selectedCategory!.name,
+                          vendorId: vendorId,
+                          fullName: fullName,
+                          subCategory: selectedSubcategory!.subCategoryName,
+                          pickedImages: images,
+                          context: context,
+                        )
+                        .whenComplete(() {
+                          setState(() {
+                            isLoading = false;
+                          });
+                          selectedCategory = null;
+                          selectedSubcategory = null;
+                          images.clear();
+                        });
                   } else {
                     print('Please enter all the fields');
                   }
@@ -303,16 +319,21 @@ class _UploadScreenState extends ConsumerState<UploadScreen> {
                     color: Colors.blue.shade900,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Center(
-                    child: Text(
-                      'Upload Product',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.7,
-                      ),
-                    ),
+                  child: Center(
+                    child:
+                        isLoading
+                            ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                            : const Text(
+                              'Upload Product',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.7,
+                              ),
+                            ),
                   ),
                 ),
               ),

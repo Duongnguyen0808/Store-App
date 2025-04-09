@@ -7,7 +7,7 @@ import 'package:vendor_store/models/product.dart';
 import 'package:vendor_store/services/manage_http_response.dart';
 
 class ProductController {
-  void uploadProduct({
+  Future<void> uploadProduct({
     required String productName,
     required int productPrice,
     required int quantity,
@@ -46,17 +46,21 @@ class ProductController {
           images: images,
         );
 
-       http.Response response = await http.post(
+        http.Response response = await http.post(
           Uri.parse("$uri/api/add-product"),
           body: product.toJson(),
           headers: <String, String>{
             "Content-Type": "application/json; charset=UTF-8 ",
           },
         );
-        manageHttpResponse(response: response, context: context, onSuccess: (){
-          showSnackBar(context, 'Product Uploaded');
-        });
-      }else{
+        manageHttpResponse(
+          response: response,
+          context: context,
+          onSuccess: () {
+            showSnackBar(context, 'Product Uploaded');
+          },
+        );
+      } else {
         showSnackBar(context, 'Select Category');
       }
     } else {

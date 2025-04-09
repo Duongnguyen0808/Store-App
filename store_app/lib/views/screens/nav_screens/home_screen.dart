@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/views/screens/nav_screens/widgets/banner_widget.dart';
-import 'package:store_app/views/screens/nav_screens/widgets/category_item_widger.dart';
+import 'package:store_app/views/screens/nav_screens/widgets/category_item_widget.dart';
 
 import 'package:store_app/views/screens/nav_screens/widgets/header_widget.dart';
+import 'package:store_app/views/screens/nav_screens/widgets/popular_product_widget.dart';
+import 'package:store_app/views/screens/nav_screens/widgets/reusable_text_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,7 +14,13 @@ class HomeScreen extends StatelessWidget {
     return const Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          children: [HeaderWidget(), BannerWidget(), CategoryItemWidget()],
+          children: [
+            HeaderWidget(),
+            BannerWidget(),
+            CategoryItemWidget(),
+            ReusableTextWidget(title: 'Popular Product', subtitle: 'View all'),
+            PopularProductWidget(),
+          ],
         ),
       ),
     );

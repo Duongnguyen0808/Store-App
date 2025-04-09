@@ -7,11 +7,11 @@ const productSchema = mongoose.Schema({
         required: true,
     },
     productPrice: {
-        type: String,
+        type: Number,
         required: true,
     },
     quantity: {
-        type: String,
+        type: Number,
         required: true,
     },
     description: {
@@ -22,12 +22,12 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    vendorId:{
-        type:String,
+    vendorId: {
+        type: String,
         required: true,
     },
-    fullName:{
-        type:String,
+    fullName: {
+        type: String,
         required: true,
     },
     subCategory: {
