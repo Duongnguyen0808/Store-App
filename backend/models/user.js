@@ -45,7 +45,6 @@ const userSchema = mongoose.Schema({
 
     },
 
-
 });
 // cho nay tao ra mo hinh ket noi 
 const User = mongoose.model("User", userSchema);

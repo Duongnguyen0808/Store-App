@@ -29,5 +29,12 @@ void manageHttpResponse({
 
 /// Hàm hiển thị thông báo lỗi bằng Snackbar
 void showSnackBar(BuildContext context, String title) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(title)));
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      margin: const EdgeInsets.all(15),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.grey,
+      content: Text(title),
+    ),
+  );
 }

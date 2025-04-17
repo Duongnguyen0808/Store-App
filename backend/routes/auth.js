@@ -6,15 +6,7 @@ const User = require('../models/user'); // Import mô hình User để làm vi�
 // Tạo Router cho API xác thực
 const authRouter = express.Router();
 
-<<<<<<< HEAD
-// ma hoa mk
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
-
-=======
 // API đăng ký người dùng
->>>>>>> 2998c69 (Update)
 authRouter.post('/api/signup', async (req, res) => {
     try {
         // Lấy dữ liệu từ request body
@@ -45,32 +37,6 @@ authRouter.post('/api/signup', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
-// dang nhap api voi pont
-
-authRouter.post('/api/signin', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const findUser = await User.findOne({ email });
-        if (!findUser) {
-            return res.status(400).json({ msg: " Không tìm thấy tài khoản " });
-        } else {
-            const isMatch = await bcrypt.compare(password, findUser.password);
-            if (!isMatch) {
-                return res.status(400).json({ msg: "Mật khẩu không đúng" });
-            } else {
-                const token = jwt.sign({ id: findUser._id }, "passwordKey");
-                const { password, ...userWithoutPassword } = findUser._doc;
-                res.json({ token, ...userWithoutPassword });
-            }
-        }
-    } catch (error) {
-
-    }
-});
-
-module.exports = authRouter;
-=======
 // API đăng nhập người dùng
 authRouter.post('/api/signin', async (req, res) => {
     try {
@@ -81,28 +47,54 @@ authRouter.post('/api/signin', async (req, res) => {
         const findUser = await User.findOne({ email });
         if (!findUser) {
             return res.status(400).json({ msg: "User not found with this email" });
+        } else {
+            const isMatch = await bcrypt.compare(password, findUser.password);
+            if (!isMatch) {
+                return res.status(400).json({ msg: 'Incorrect Password' });
+            } else {
+                const token = jwt.sign({ id: findUser._id }, "passwordKey");
+
+                const { password: _, ...userWithoutPassword } = findUser._doc;
+
+                res.json({ token, user: userWithoutPassword });
+            }
         }
-
-        // So sánh mật khẩu nhập vào với mật khẩu trong database
-        const isMatch = await bcrypt.compare(password, findUser.password);
-        if (!isMatch) {
-            return res.status(400).json({ msg: 'Incorrect Password' });
-        }
-
-        // Tạo JWT token để xác thực người dùng
-        const token = jwt.sign({ id: findUser._id }, "passwordKey", { expiresIn: "1h" });
-
-        // Loại bỏ password trước khi gửi dữ liệu trả về
-        const { password: _, ...userWithoutPassword } = findUser._doc;
-
-        // Trả về token và thông tin người dùng (không chứa mật khẩu)
-        res.json({ token, ...userWithoutPassword });
     } catch (error) {
-        // Xử lý lỗi nếu có bất kỳ vấn đề nào xảy ra
         res.status(500).json({ error: error.message });
     }
 });
 
-// Xuất module authRouter để sử dụng ở file khác
+//Put route for updating user's state, city and locality
+authRouter.put('/api/users/:id', async (req, res) => {
+    try {
+        //Extract the 'id' parameter from the request URL
+        const { id } = req.params;
+
+        //Extract the "state", "city" and locality fields from the request body
+        const { state, city, locality } = req.body;
+
+        //Find the user by their ID and update the state, city and locality
+        // the {new:true} option ensures the updated document is returned
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { state, city, locality },
+            { new: true },
+        );
+        if (!updatedUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        return res.status(200).json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to update user." });
+    }
+});
+
+authRouter.get('/api/users', async (req, res) => {
+    try {
+        const users = await User.find().select('-password'); // Loại bỏ trường password
+        return res.status(200).json(users);
+    } catch (e) {
+        return res.status(500).json({ error: e.message }); // Sửa lỗi cú pháp và trả về lỗi chi tiết
+    }
+});
 module.exports = authRouter;
->>>>>>> 2998c69 (Update)
