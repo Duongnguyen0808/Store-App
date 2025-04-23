@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
+const subCategory = require('./sub_category');
 
-const productSchema = mongoose.Schema({
+const productSchema = new mongoose.Schema({
     productName: {
         type: String,
         trim: true,
         required: true,
     },
     productPrice: {
-        type: String,
+        type: Number,
         required: true,
     },
     quantity: {
-        type: String,
+        type: Number,
         required: true,
     },
     description: {
@@ -19,6 +20,14 @@ const productSchema = mongoose.Schema({
         required: true,
     },
     category: {
+        type: String,
+        required: true,
+    },
+    vendorId: {
+        type: String,
+        required: true,
+    },
+    fullName: {
         type: String,
         required: true,
     },
@@ -40,8 +49,16 @@ const productSchema = mongoose.Schema({
         type: Boolean,
         default: false,
     },
+
+    averageRating: {
+        type: Number,
+        default: 0,
+    },
+    totalRatings: {
+        type: Number,
+        default: 0,
+    },
 });
 
 const Product = mongoose.model("Product", productSchema);
-
 module.exports = Product;
