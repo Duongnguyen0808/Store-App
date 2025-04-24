@@ -5,12 +5,16 @@ class ReusableTextWidget extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  ReusableTextWidget({super.key, required this.title, required this.subtitle});
+  const ReusableTextWidget({
+    super.key,
+    required this.title,
+    required this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25, right: 25),
+      padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

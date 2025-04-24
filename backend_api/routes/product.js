@@ -19,7 +19,7 @@ productRouter.get('/api/popular-products', async (req, res) => {
         if (!product || product.length == 0) {
             return res.status(404).json({ msg: "products not found" });
         } else {
-            return res.status(200).json({ product });
+            return res.status(200).json( product );
         }
     } catch (e) {
         res.status(500).json({ error: e.message });
