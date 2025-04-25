@@ -40,7 +40,7 @@ class _PopularProductWidgetState extends State<PopularProductWidget> {
               itemBuilder: (context, index) {
                 final product = products[index];
 
-                return ProductItemWidget(product: product,);
+                return ProductItemWidget(product: product);
               },
             ),
           );
