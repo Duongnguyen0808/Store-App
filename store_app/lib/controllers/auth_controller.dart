@@ -135,4 +135,35 @@ class AuthController {
       showSnackBar(context, "error signing out");
     }
   }
+
+  Future<void> updateUserLocation({
+    required BuildContext context,
+    required String id,
+    required String state,
+    required String city,
+    required String locality,
+    required WidgetRef ref,
+  }) async {
+    try {
+      final http.Response response = await http.put(
+        Uri.parse('$uri/api/users/$id'),
+        headers: <String, String>{
+          "Content-Type": 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({'state': state, 'city': city, 'locality': locality}),
+      );manageHttpResponse(
+        response: response,
+        context: context,
+        onSuccess: () async {
+          final updateUser = jsonDecode(response.body);
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          final userJson = jsonEncode(updateUser);
+          ref.read(userProvider.notifier).setUser(userJson);
+          await preferences.setString('user', userJson);
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, 'Error updating location');
+    }
+  }
 }

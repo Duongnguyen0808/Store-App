@@ -5,13 +5,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:store_app/controllers/order_controller.dart';
 import 'package:store_app/provider/cart_provider.dart';
 import 'package:store_app/provider/user_provider.dart';
+import 'package:store_app/services/manage_http_response.dart';
 import 'package:store_app/views/screens/detail/screens/shipping_address_screen.dart';
+import 'package:store_app/views/screens/main_screen.dart';
+
 
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
   @override
-  _CheckoutScreenState createState() => _CheckoutScreenState();
+  ConsumerState<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
@@ -23,11 +26,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final _cartProvider = ref.read(cartProvider.notifier);
     final user = ref.watch(userProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('checkout')),
-
+      appBar: AppBar(title: const Text('Checkout')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +39,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return ShippingAddressScreen();
+                        return  ShippingAddressScreen();
                       },
                     ),
                   );
@@ -58,7 +59,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             border: Border.all(color: const Color(0xFFEFF0F2)),
-
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
@@ -81,101 +81,133 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Align(
+                                      Align(
                                         alignment: Alignment.centerLeft,
                                         child: SizedBox(
                                           width: 114,
-                                          child: Text(
-                                            'Add  Adress',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              height: 1.1,
-                                            ),
-                                          ),
+                                          child:
+                                              user!.state.isNotEmpty
+                                                  ? const Text(
+                                                    'Add Address',
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      height: 1.1,
+                                                    ),
+                                                  )
+                                                  : const Text(
+                                                    'Add Address',
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      height: 1.1,
+                                                    ),
+                                                  ),
                                         ),
                                       ),
                                       const SizedBox(height: 4),
                                       Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'United state',
-                                          style: GoogleFonts.lato(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 1.3,
-                                          ),
-                                        ),
+                                        child:
+                                            user.state.isNotEmpty
+                                                ? Text(
+                                                  user.state,
+                                                  style: GoogleFonts.lato(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                    letterSpacing: 1.3,
+                                                  ),
+                                                )
+                                                : Text(
+                                                  'United state',
+                                                  style: GoogleFonts.lato(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                    letterSpacing: 1.3,
+                                                  ),
+                                                ),
                                       ),
                                       Align(
                                         alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'enter city',
-                                          style: GoogleFonts.lato(
-                                            color: const Color(0xFF7F808C),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 16,
-                                top: 16,
-                                child: SizedBox.square(
-                                  dimension: 42,
-                                  child: Stack(
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      Positioned(
-                                        left: 0,
-                                        top: 0,
-                                        child: Container(
-                                          width: 43,
-                                          height: 43,
-                                          clipBehavior: Clip.hardEdge,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFFBF7F5),
-
-                                            borderRadius: BorderRadius.circular(
-                                              100,
-                                            ),
-                                          ),
-                                          child: Stack(
-                                            clipBehavior: Clip.hardEdge,
-                                            children: [
-                                              Positioned(
-                                                left: 11,
-                                                top: 11,
-                                                child: Image.network(
-                                                  height: 26,
-                                                  width: 26,
-                                                  'https://storage.googleapis.com/codeless-dev.appspot.com/uploads%2Fimages%2Fnn2Ldqjoc2Xp89Y7Wfzf%2F2ee3a5ce3b02828d0e2806584a6baa88.png',
+                                        child:
+                                            user.city.isNotEmpty
+                                                ? Text(
+                                                  user.city,
+                                                  style: GoogleFonts.lato(
+                                                    color: const Color(
+                                                      0xFF7F808C,
+                                                    ),
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 12,
+                                                  ),
+                                                )
+                                                : Text(
+                                                  'Enter city',
+                                                  style: GoogleFonts.lato(
+                                                    color: const Color(
+                                                      0xFF7F808C,
+                                                    ),
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 12,
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ),
-
-                              Positioned(
-                                left: 305,
-                                top: 25,
-                                child: Image.network(
-                                  height: 20,
-                                  width: 20,
-                                  'https://firebasestorage.googleapis.com/v0/b/codeless-app.appspot.com/o/projects%2Fnn2Ldqjoc2Xp89Y7Wfzf%2F6ce18a0efc6e889de2f2878027c689c9caa53feeedit%201.png?alt=media&token=a3a8a999-80d5-4a2e-a9b7-a43a7fa8789a',
                                 ),
                               ),
                             ],
                           ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 16,
+                        top: 16,
+                        child: SizedBox.square(
+                          dimension: 42,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Positioned(
+                                left: 0,
+                                top: 0,
+                                child: Container(
+                                  width: 43,
+                                  height: 43,
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFBF7F5),
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  child: Stack(
+                                    clipBehavior: Clip.hardEdge,
+                                    children: [
+                                      Positioned(
+                                        left: 11,
+                                        top: 11,
+                                        child: Image.network(
+                                          height: 26,
+                                          width: 26,
+                                          'https://storage.googleapis.com/codeless-dev.appspot.com/uploads%2Fimages%2Fnn2Ldqjoc2Xp89Y7Wfzf%2F2ee3a5ce3b02828d0e2806584a6baa88.png',
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 305,
+                        top: 25,
+                        child: Image.network(
+                          width: 20,
+                          height: 20,
+                          'https://firebasestorage.googleapis.com/v0/b/codeless-app.appspot.com/o/projects%2Fnn2Ldqjoc2Xp89Y7Wfzf%2F6ce18a0efc6e889de2f2878027c689c9caa53feeedit%201.png?alt=media&token=a3a8a999-80d5-4a2e-a9b7-a43a7fa8789a',
                         ),
                       ),
                     ],
@@ -184,7 +216,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               ),
               const SizedBox(height: 10),
               Text(
-                'Your Item',
+                'You Item',
                 style: GoogleFonts.quicksand(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -206,7 +238,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           border: Border.all(color: const Color(0xFFEFF0F2)),
                           borderRadius: BorderRadius.circular(12),
                         ),
-
                         child: Stack(
                           clipBehavior: Clip.none,
                           children: [
@@ -267,7 +298,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                         ),
                                       ),
                                     ),
-
                                     const SizedBox(width: 16),
                                     Text(
                                       "\$${cartItem.productPrice.toStringAsFixed(2)}",
@@ -275,7 +305,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                         fontSize: 14,
                                         color: Colors.pink,
                                         fontWeight: FontWeight.bold,
-                                        letterSpacing: 1.3,
                                       ),
                                     ),
                                   ],
@@ -289,7 +318,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   },
                 ),
               ),
-
               const SizedBox(height: 10),
               Text(
                 'Choose Payment Method',
@@ -298,7 +326,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              RadioListTile<String>(
+              RadioListTile(
                 title: Text(
                   'Stripe',
                   style: GoogleFonts.montserrat(
@@ -316,7 +344,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               ),
               RadioListTile<String>(
                 title: Text(
-                  'Cash on delivery',
+                  'Cash on Deliver',
                   style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
                 ),
                 value: 'cashOnDelivery',
@@ -331,11 +359,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           ),
         ),
       ),
-
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child:
-            ref.read(userProvider)!.state == ""
+            user.state.isEmpty
                 ? TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -348,7 +375,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     );
                   },
                   child: Text(
-                    'Please enter shipping address',
+                    'Please Enter Shipping Address',
                     style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.bold,
                       fontSize: 17,
@@ -381,6 +408,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           delivered: false,
                           context: context,
                         );
+                      }).then((value) {
+                        _cartProvider.clearCart();
+                        showSnackBar(context, 'Order successfully placed');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return MainScreen();
+                            },
+                          ),
+                        );
                       });
                     }
                   },
@@ -388,7 +426,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     width: 338,
                     height: 58,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF3854EE),
+                      color: Color(0xFF3854EE),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Center(
