@@ -11,9 +11,10 @@ class AccountScreen extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () async {
-            await _authController.sigOutUser(context: context);
+            // await _authController.sigOutUser(context: context);
+            
           },
-          child: Text('Signout'),
+          child: Text('My Orders'),
         ),
       ),
     );
